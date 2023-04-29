@@ -29,9 +29,12 @@ public class Member {
     public Member(String username,int age, Team team){
         this.username = username;
         this.age = age;
-        if(team == null){
-            throw new IllegalArgumentException("Please choose team");
-        }else {
+//        if(team == null){
+//            throw new IllegalArgumentException("Please choose team");
+//        }else {
+//            changeTeam(team);
+//        }
+        if(team != null){
             changeTeam(team);
         }
     }
