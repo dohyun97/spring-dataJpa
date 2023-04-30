@@ -192,5 +192,16 @@ class MemberRepositoryTest {
         }
     }
 
+    //query hint
+    @Test
+    void queryHint(){
+        memberRepository.save(new Member("member1",10));
+        em.flush();
+        em.clear();
+
+        Member member = memberRepository.findReadOnlyByUsername("member1");
+        member.changeInfo("member2",member.getAge());
+        em.flush();//query hint 때문에 업데이터 쿼리 안날라가
+    }
 
 }
