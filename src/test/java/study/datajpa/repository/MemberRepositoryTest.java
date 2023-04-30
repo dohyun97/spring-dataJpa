@@ -3,6 +3,9 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -119,6 +122,35 @@ class MemberRepositoryTest {
         for (Member member : result) {
             System.out.println("member = "+result);
         }
+    }
+
+    @Test
+    void paging(){
+        memberRepository.save( new Member("member1",10));
+        memberRepository.save(new Member("member2",10));
+        memberRepository.save(new Member("member3",10));
+        memberRepository.save(new Member("member4",10));
+        memberRepository.save(new Member("member5",10));
+        memberRepository.save( new Member("member6",10));
+        memberRepository.save(new Member("member7",10));
+        memberRepository.save( new Member("member8",10));
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "username"));
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+        //Page<MemberDto> dtoPage = page.map(m->new MemberDto(m.getId(),m.getUsername(),null)); Api보낼때 page를 dto 타입으로 변환 가능
+
+        List<Member> content = page.getContent();//조회된 데이터
+        assertThat(content.size()).isEqualTo(3);//조회된 데이터 수
+        assertThat(page.getTotalElements()).isEqualTo(8);//전체 데이터 수
+        assertThat(page.getNumber()).isEqualTo(0);//현재 페이지 번호
+        assertThat(page.getTotalPages()).isEqualTo(3);//전체 페이지 번호
+        assertThat(page.isFirst()).isTrue();//첫번체 페이지인가?
+        assertThat(page.isLast()).isFalse();//마지막 페이지인가?
+        assertThat(page.hasNext()).isTrue();//다음 페이지가 있는가?
     }
 
 }
