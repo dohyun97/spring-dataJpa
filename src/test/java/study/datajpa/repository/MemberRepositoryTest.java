@@ -153,4 +153,22 @@ class MemberRepositoryTest {
         assertThat(page.hasNext()).isTrue();//다음 페이지가 있는가?
     }
 
+    //벌크연산
+    @Test
+    void bulkUpdate(){
+        memberRepository.save( new Member("member1",10));
+        memberRepository.save(new Member("member2",20));
+        memberRepository.save(new Member("member3",30));
+        memberRepository.save(new Member("member4",40));
+        memberRepository.save(new Member("member5",50));
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+        //then
+        Member member5 = memberRepository.findByUsername("member5").get(); //@Modifying(clearAuotmatically=true 때문에. 벌크수정후 영속성 컨텍스트 초기화
+        System.out.println("member5 age: "+member5.getAge());
+        assertThat(resultCount).isEqualTo(4);
+
+    }
+
+
 }
