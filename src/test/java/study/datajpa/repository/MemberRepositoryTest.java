@@ -204,4 +204,10 @@ class MemberRepositoryTest {
         em.flush();//query hint 때문에 업데이터 쿼리 안날라가
     }
 
+    //사용자 정의 리포지토리 구현
+    @Test
+    void customRepository(){
+        List<Member> result = memberRepository.findMemberCustom();
+    }
+
 }
