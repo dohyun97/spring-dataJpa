@@ -66,4 +66,34 @@ class MemberJpaRepositoryTest {
         assertThat(result.size()).isEqualTo(1);
     }
 
+    @Test
+    void paging(){
+        memberJpaRepository.save( new Member("member1",10));
+       memberJpaRepository.save(new Member("member2",10));
+        memberJpaRepository.save(new Member("member3",10));
+       memberJpaRepository.save(new Member("member4",10));
+        memberJpaRepository.save(new Member("member5",10));
+        memberJpaRepository.save( new Member("member6",10));
+        memberJpaRepository.save(new Member("member7",10));
+        memberJpaRepository.save( new Member("member8",10));
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        //페이지 계산 공식 적용...
+        // totalPage = totalCount / size ...
+        // 마지막 페이지 ... // 최초 페이지 ..
+        //spring data jpa에서 이거를 다 계산해줘
+
+
+        List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+        for (Member member : members) {
+            System.out.println("members = "+member);
+        }
+        assertThat(members.size()).isEqualTo(3);
+        long totalCount = memberJpaRepository.totalCount(age);
+        assertThat(totalCount).isEqualTo(8);
+    }
+
 }
