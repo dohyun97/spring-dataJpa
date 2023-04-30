@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberJpaRepositoryTest {
     @Autowired
     MemberJpaRepository memberJpaRepository;
+    @Autowired
+    EntityManager em;
 
     @Test
     void testMember(){
@@ -98,18 +101,16 @@ class MemberJpaRepositoryTest {
     }
     //벌크연산
     @Test
-    void bulkUpdate(){
-        memberJpaRepository.save( new Member("member1",10));
-        memberJpaRepository.save(new Member("member2",20));
-        memberJpaRepository.save(new Member("member3",30));
-        memberJpaRepository.save(new Member("member4",40));
-        memberJpaRepository.save(new Member("member5",50));
+    void bulkUpdate() {
+        memberJpaRepository.save(new Member("member1", 10));
+        memberJpaRepository.save(new Member("member2", 20));
+        memberJpaRepository.save(new Member("member3", 30));
+        memberJpaRepository.save(new Member("member4", 40));
+        memberJpaRepository.save(new Member("member5", 50));
         //when
         int resultCount = memberJpaRepository.bulkAgePlus(20);
         //then
         assertThat(resultCount).isEqualTo(4);
     }
-
-
 
 }
