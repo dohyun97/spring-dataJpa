@@ -210,4 +210,24 @@ class MemberRepositoryTest {
         List<Member> result = memberRepository.findMemberCustom();
     }
 
+    //Auditing - createDate, updateDate...
+    @Test
+    void JpaEventBaseEntity() throws InterruptedException {
+        Member member = new Member("member1");
+        memberRepository.save(member); //@Prepersist
+
+        Thread.sleep(100);
+        member.changeInfo("member2",member.getAge());
+
+        em.flush(); //@PreUpdate
+        em.clear();
+        //when
+        Member fidnMember = memberRepository.findById(member.getId()).get();
+        //then
+        System.out.println("findMember.createdDate = "+fidnMember.getCreatedDate());
+        System.out.println("findMember.updatedDate = "+fidnMember.getUpdatedDate());
+       System.out.println("findMember.createdBy = "+fidnMember.getCreatedBy());
+       System.out.println("findMember.lastModifiedBy = "+fidnMember.getLastModifiedBy());
+    }
+
 }
